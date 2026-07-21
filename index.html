@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Optie Dashboard</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <h1>Optie Dashboard</h1>
+    <span class="updated" id="updated"></span>
+  </header>
+
+  <main>
+    <section class="stat-grid" id="statGrid" aria-label="Key metrics"></section>
+
+    <section class="chart-grid">
+      <figure class="card" id="lineCard">
+        <figcaption>
+          <span class="card-title">Portfolio value (30 days)</span>
+          <button class="table-toggle" data-target="line">View as table</button>
+        </figcaption>
+        <div class="chart-wrap" id="lineChartWrap"></div>
+        <div class="table-wrap hidden" id="lineTableWrap"></div>
+      </figure>
+
+      <figure class="card" id="barCard">
+        <figcaption>
+          <span class="card-title">P&amp;L by symbol</span>
+          <button class="table-toggle" data-target="bar">View as table</button>
+        </figcaption>
+        <div class="chart-wrap" id="barChartWrap"></div>
+        <div class="table-wrap hidden" id="barTableWrap"></div>
+      </figure>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Open positions</h2>
+      <div class="table-wrap" id="positionsTableWrap"></div>
+    </section>
+  </main>
+
+  <p class="note">Sample data for demonstration &mdash; wire in a real data source in <code>script.js</code>.</p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
