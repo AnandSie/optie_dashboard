@@ -69,6 +69,22 @@ body {
   color: var(--text-muted);
 }
 
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 28px 0 4px;
+}
+
+.section-title:first-child {
+  margin-top: 0;
+}
+
+.section-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 14px;
+}
+
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));

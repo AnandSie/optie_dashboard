@@ -15,6 +15,25 @@
   </header>
 
   <main>
+    <h2 class="section-title">AEX index</h2>
+    <p class="section-note" id="aexSectionNote">Loading live data from <code>data/</code>&hellip;</p>
+
+    <section class="stat-grid" id="aexStatGrid" aria-label="AEX key metrics"></section>
+
+    <section class="chart-grid">
+      <figure class="card" id="aexCard">
+        <figcaption>
+          <span class="card-title">AEX close price</span>
+          <button class="table-toggle" data-target="aex">View as table</button>
+        </figcaption>
+        <div class="chart-wrap" id="aexChartWrap"></div>
+        <div class="table-wrap hidden" id="aexTableWrap"></div>
+      </figure>
+    </section>
+
+    <h2 class="section-title">Sample options portfolio</h2>
+    <p class="section-note">Placeholder data &mdash; not connected to a real broker or positions feed yet.</p>
+
     <section class="stat-grid" id="statGrid" aria-label="Key metrics"></section>
 
     <section class="chart-grid">
@@ -43,7 +62,7 @@
     </section>
   </main>
 
-  <p class="note">Sample data for demonstration &mdash; wire in a real data source in <code>script.js</code>.</p>
+  <p class="note">AEX section is fetched live from <code>data/aex_history.csv</code> and <code>data/aex_history_summary.json</code>, refreshed by the <code>refresh-aex-data</code> skill. The options portfolio below is sample data &mdash; wire in a real data source in <code>script.js</code>.</p>
 </div>
 
 <script src="script.js"></script>
