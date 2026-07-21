@@ -5,12 +5,9 @@
   --text-secondary: #52514e;
   --text-muted:     #898781;
   --gridline:       #e1e0d9;
-  --baseline:       #c3c2b7;
   --border:         rgba(11,11,11,0.10);
 
   --series-1:       #2a78d6; /* blue: sequential / line */
-  --diverge-pos:    #2a78d6; /* blue */
-  --diverge-neg:    #e34948; /* red */
 
   --good:           #006300;
   --critical:       #d03b3b;
@@ -24,12 +21,9 @@
     --text-secondary: #c3c2b7;
     --text-muted:     #898781;
     --gridline:       #2c2c2a;
-    --baseline:       #383835;
     --border:         rgba(255,255,255,0.10);
 
     --series-1:       #3987e5;
-    --diverge-pos:    #3987e5;
-    --diverge-neg:    #e66767;
 
     --good:           #0ca30c;
     --critical:       #e66767;
@@ -120,17 +114,6 @@ body {
 .stat-delta.up { color: var(--good); }
 .stat-delta.down { color: var(--critical); }
 
-.chart-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 720px) {
-  .chart-grid { grid-template-columns: 1fr; }
-}
-
 .card {
   background: var(--surface-1);
   border: 1px solid var(--border);
@@ -173,7 +156,6 @@ figcaption .card-title { margin-bottom: 0; }
 svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
 
 .gridline { stroke: var(--gridline); stroke-width: 1; }
-.baseline { stroke: var(--baseline); stroke-width: 1; }
 .axis-label { fill: var(--text-muted); font-size: 10px; }
 
 .line-path { fill: none; stroke: var(--series-1); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
@@ -182,11 +164,6 @@ svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
 .hover-dot { fill: var(--series-1); stroke: var(--surface-1); stroke-width: 2; }
 .crosshair { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 2,2; }
 .hit-layer { fill: transparent; }
-
-.bar-pos { fill: var(--diverge-pos); }
-.bar-neg { fill: var(--diverge-neg); }
-.bar-label { fill: var(--text-secondary); font-size: 10px; }
-.bar-tick { fill: var(--text-muted); font-size: 10px; text-anchor: middle; }
 
 .tooltip {
   position: absolute;
@@ -228,8 +205,6 @@ table.data-table th {
 }
 
 table.data-table td.num { text-align: right; }
-table.data-table td.status-good { color: var(--good); }
-table.data-table td.status-critical { color: var(--critical); }
 
 .note {
   margin-top: 24px;
