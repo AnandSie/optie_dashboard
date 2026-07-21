@@ -65,11 +65,16 @@ function renderLineChartInto(chartWrapId, tableWrapId, series, ariaLabel, valueF
     yTicks += `<text class="axis-label" x="${padL - 8}" y="${(gy + 3).toFixed(1)}" text-anchor="end">${Math.round(v).toLocaleString()}</text>`;
   }
 
+  // If the series crosses a calendar year boundary, dates need the year to stay
+  // unambiguous (a bare "Jan 2" could be any of several years in an 11-year series).
+  const spansMultipleYears = series[0].date.getFullYear() !== series[series.length - 1].date.getFullYear();
+  const dateFmt = spansMultipleYears ? fmtDateFull : fmtDate;
+
   const xTickEvery = Math.max(1, Math.ceil(series.length / 6));
   let xTicks = "";
   series.forEach((d, i) => {
     if (i % xTickEvery === 0 || i === series.length - 1) {
-      xTicks += `<text class="axis-label" x="${x(i).toFixed(1)}" y="${H - 4}" text-anchor="middle">${fmtDate(d.date)}</text>`;
+      xTicks += `<text class="axis-label" x="${x(i).toFixed(1)}" y="${H - 4}" text-anchor="middle">${dateFmt(d.date)}</text>`;
     }
   });
 
@@ -108,7 +113,7 @@ function renderLineChartInto(chartWrapId, tableWrapId, series, ariaLabel, valueF
 
     const rect = wrap.getBoundingClientRect();
     const scale = rect.width / W;
-    tooltip.show(cx * scale, cy * scale, `<span class="tt-label">${fmtDate(d.date)}</span><br><strong>${valueFormatter(d.value)}</strong>`);
+    tooltip.show(cx * scale, cy * scale, `<span class="tt-label">${dateFmt(d.date)}</span><br><strong>${valueFormatter(d.value)}</strong>`);
   });
 
   svg.addEventListener("mouseleave", () => {
@@ -122,7 +127,7 @@ function renderLineChartInto(chartWrapId, tableWrapId, series, ariaLabel, valueF
     <table class="data-table">
       <thead><tr><th>Date</th><th class="num">Value</th></tr></thead>
       <tbody>
-        ${series.map((d) => `<tr><td>${fmtDate(d.date)}</td><td class="num">${valueFormatter(d.value)}</td></tr>`).join("")}
+        ${series.map((d) => `<tr><td>${dateFmt(d.date)}</td><td class="num">${valueFormatter(d.value)}</td></tr>`).join("")}
       </tbody>
     </table>
   `;
@@ -172,7 +177,6 @@ async function loadAexData() {
 
     if (rows.length < 2) throw new Error("aex_history.csv has fewer than 2 usable rows");
 
-    const recent = rows.slice(-180);
     const last = rows[rows.length - 1];
     const prev = rows[rows.length - 2];
     const dayDelta = last.value - prev.value;
@@ -208,9 +212,9 @@ async function loadAexData() {
       },
     ]);
 
-    renderLineChartInto("aexChartWrap", "aexTableWrap", recent, "AEX close price, most recent sessions", fmtIndex);
+    renderLineChartInto("aexChartWrap", "aexTableWrap", rows, `AEX close price, full history since ${fmtDateFull(rows[0].date)}`, fmtIndex);
 
-    note.textContent = `Live data: ${summary.total_rows.toLocaleString()} sessions through ${fmtDate(last.date)} — chart shows the most recent ${recent.length}.`;
+    note.textContent = `Live data: ${summary.total_rows.toLocaleString()} sessions, ${fmtDateFull(rows[0].date)} through ${fmtDateFull(last.date)}.`;
   } catch (err) {
     note.textContent = `Couldn't load live AEX data (${err.message}). Run the refresh-aex-data skill, or check that data/ files exist and this page is served over HTTP.`;
     document.getElementById("aexChartWrap").innerHTML = "";
