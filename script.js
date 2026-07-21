@@ -162,6 +162,7 @@ function parseCsv(text) {
 
 async function loadAexData() {
   const note = document.getElementById("aexSectionNote");
+  const updatedEl = document.getElementById("updated");
   try {
     const [csvRes, summaryRes] = await Promise.all([
       fetch("data/aex_history.csv"),
@@ -215,14 +216,23 @@ async function loadAexData() {
     renderLineChartInto("aexChartWrap", "aexTableWrap", rows, `AEX close price, full history since ${fmtDateFull(rows[0].date)}`, fmtIndex);
 
     note.textContent = `Live data: ${summary.total_rows.toLocaleString()} sessions, ${fmtDateFull(rows[0].date)} through ${fmtDateFull(last.date)}.`;
+
+    // generated_at is stamped by analyze_high_open_diff.py at the moment the
+    // refresh pipeline last ran — this is data freshness, not page-load time.
+    if (summary.generated_at) {
+      const runAt = new Date(summary.generated_at);
+      updatedEl.textContent = `Data refreshed ${runAt.toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}`;
+    } else {
+      updatedEl.textContent = "Data refresh time unknown (rerun the refresh-aex-data skill to record it)";
+    }
   } catch (err) {
     note.textContent = `Couldn't load live AEX data (${err.message}). Run the refresh-aex-data skill, or check that data/ files exist and this page is served over HTTP.`;
     document.getElementById("aexChartWrap").innerHTML = "";
+    updatedEl.textContent = "Data refresh time unavailable";
   }
 }
 
 function init() {
-  document.getElementById("updated").textContent = `Updated ${new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}`;
   wireToggles();
   loadAexData();
 }

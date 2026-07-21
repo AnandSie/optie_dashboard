@@ -59,7 +59,7 @@ Options:
 
 Outputs:
 
-- Summary file — total rows, rows excluded, the diff threshold used for trimming, and both the trimmed and full average diff.
+- Summary file — a `generated_at` UTC timestamp for when this run completed, total rows, rows excluded, the diff threshold used for trimming, and both the trimmed and full average diff. The dashboard UI reads `generated_at` to show when the data was actually refreshed, as opposed to when the page happened to load.
 - Detail file — original data plus a `diff` column and an `excluded` boolean flag per row, so you can see exactly which rows were trimmed.
 
 ## Typical workflow

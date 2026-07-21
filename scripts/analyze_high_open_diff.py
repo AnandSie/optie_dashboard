@@ -18,6 +18,7 @@ Usage:
 import argparse
 import json
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -74,6 +75,7 @@ def main():
     avg_full = df["diff"].mean()
 
     summary = {
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "input_file": str(in_path),
         "total_rows": int(before_rows),
         "rows_dropped_missing_data": int(dropped_na),
