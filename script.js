@@ -1,4 +1,5 @@
 const fmtDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+const fmtDateFull = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 const fmtIndex = (n) => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtSignedIndex = (n) => (n >= 0 ? "+" : "") + fmtIndex(n);
 
@@ -194,13 +195,13 @@ async function loadAexData() {
       {
         label: "History",
         value: `${summary.total_rows.toLocaleString()} sessions`,
-        delta: `since ${fmtDate(rows[0].date)}`,
+        delta: `since ${fmtDateFull(rows[0].date)}`,
         up: true,
         noDeltaColor: true,
       },
       {
         label: "Data as of",
-        value: fmtDate(last.date),
+        value: fmtDateFull(last.date),
         delta: `${summary.rows_excluded_as_outliers} outlier days trimmed`,
         up: true,
         noDeltaColor: true,
