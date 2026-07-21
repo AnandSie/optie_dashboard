@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Generated data from scripts/
+scripts/*.csv
+scripts/*_summary.json
