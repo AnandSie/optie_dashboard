@@ -1,0 +1,11 @@
+{
+  "input_file": "data\\aex_history.csv",
+  "total_rows": 2955,
+  "rows_dropped_missing_data": 0,
+  "exclude_pct": 5.0,
+  "diff_threshold": 9.909973,
+  "rows_excluded_as_outliers": 148,
+  "rows_kept": 2807,
+  "average_diff_full": 3.558819,
+  "average_diff_trimmed": 3.019591
+}
