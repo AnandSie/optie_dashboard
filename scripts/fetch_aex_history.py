@@ -11,10 +11,37 @@ Requires: pip install yfinance --break-system-packages
 """
 
 import argparse
+import os
 import sys
 from datetime import datetime, timezone
 
 import yfinance as yf
+
+
+def _proxy_safe_session():
+    """Build a yfinance session that works behind a TLS-terminating proxy.
+
+    yfinance's default session uses curl_cffi's browser-impersonation mode,
+    whose custom TLS stack fails to complete the handshake through
+    corporate/agent MITM proxies (fails even when the proxy CA is trusted).
+    Falling back to a plain curl_cffi session (no impersonation) with a
+    normal browser User-Agent avoids that, and still honors HTTPS_PROXY /
+    CURL_CA_BUNDLE from the environment when present.
+    """
+    if not (os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")):
+        return None
+    try:
+        from curl_cffi import requests as cf_requests
+    except ImportError:
+        return None
+    session = cf_requests.Session()
+    session.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        )
+    })
+    return session
 
 
 def parse_args():
@@ -48,6 +75,7 @@ def main():
         interval=args.interval,
         progress=False,
         auto_adjust=False,
+        session=_proxy_safe_session(),
     )
 
     if df.empty:
