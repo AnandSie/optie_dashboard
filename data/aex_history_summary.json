@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-22T10:47:42+00:00",
+  "generated_at": "2026-07-23T04:08:53+00:00",
   "input_file": "data/aex_history.csv",
   "total_rows": 2956,
   "rows_dropped_missing_data": 0,
   "exclude_pct": 5.0,
-  "diff_threshold": 9.909973,
+  "diff_threshold": 9.919983,
   "rows_excluded_as_outliers": 148,
   "rows_kept": 2808,
-  "average_diff_full": 3.560992,
-  "average_diff_trimmed": 3.022069
+  "average_diff_full": 3.562338,
+  "average_diff_trimmed": 3.022158
 }
