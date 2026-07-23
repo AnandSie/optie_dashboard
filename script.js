@@ -198,6 +198,13 @@ async function loadAexData() {
         noDeltaColor: true,
       },
       {
+        label: "Avg Open–Low gap (trimmed)",
+        value: fmtIndex(summary.average_ol_diff_trimmed),
+        delta: `${fmtIndex(summary.average_ol_diff_full)} untrimmed`,
+        up: true,
+        noDeltaColor: true,
+      },
+      {
         label: "History",
         value: `${summary.total_rows.toLocaleString()} sessions`,
         delta: `since ${fmtDateFull(rows[0].date)}`,

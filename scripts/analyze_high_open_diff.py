@@ -1,13 +1,14 @@
 """
-Analyze the daily |High - Open| gap from a price history CSV (e.g. the one
-produced by fetch_aex_history.py).
+Analyze the daily |High - Open| and |Open - Low| gaps from a price history
+CSV (e.g. the one produced by fetch_aex_history.py).
 
 Steps:
-1. Load CSV, compute abs(High - Open) per row.
-2. Trim the top N% largest diffs (outliers), N configurable via --exclude-pct.
-3. Compute the average of the remaining (trimmed) diffs.
-4. Write a summary file (JSON or CSV) and a detail CSV with a per-row diff
-   column + an "excluded" flag, so you can inspect exactly what was trimmed.
+1. Load CSV, compute abs(High - Open) and abs(Open - Low) per row.
+2. Trim the top N% largest diffs (outliers) for each gap, N configurable via
+   --exclude-pct.
+3. Compute the average of the remaining (trimmed) diffs, for each gap.
+4. Write a summary file (JSON or CSV) and a detail CSV with per-row diff
+   columns + "excluded" flags, so you can inspect exactly what was trimmed.
 
 Usage:
     python analyze_high_open_diff.py aex_history.csv
@@ -49,17 +50,19 @@ def main():
 
     df = pd.read_csv(in_path)
 
-    missing = [c for c in ("High", "Open") if c not in df.columns]
+    missing = [c for c in ("High", "Open", "Low") if c not in df.columns]
     if missing:
         print(f"Input CSV is missing required column(s): {missing}", file=sys.stderr)
         sys.exit(1)
 
     df["High"] = pd.to_numeric(df["High"], errors="coerce")
     df["Open"] = pd.to_numeric(df["Open"], errors="coerce")
+    df["Low"] = pd.to_numeric(df["Low"], errors="coerce")
     df["diff"] = (df["High"] - df["Open"]).abs()
+    df["ol_diff"] = (df["Open"] - df["Low"]).abs()
 
     before_rows = len(df)
-    df = df.dropna(subset=["diff"])
+    df = df.dropna(subset=["diff", "ol_diff"])
     dropped_na = before_rows - len(df)
 
     if args.exclude_pct < 0 or args.exclude_pct >= 100:
@@ -70,9 +73,16 @@ def main():
     threshold = df["diff"].quantile(1 - args.exclude_pct / 100)
     df["excluded"] = df["diff"] > threshold
 
+    ol_threshold = df["ol_diff"].quantile(1 - args.exclude_pct / 100)
+    df["ol_excluded"] = df["ol_diff"] > ol_threshold
+
     kept = df.loc[~df["excluded"], "diff"]
     avg_trimmed = kept.mean()
     avg_full = df["diff"].mean()
+
+    ol_kept = df.loc[~df["ol_excluded"], "ol_diff"]
+    ol_avg_trimmed = ol_kept.mean()
+    ol_avg_full = df["ol_diff"].mean()
 
     summary = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -85,6 +95,11 @@ def main():
         "rows_kept": int(len(kept)),
         "average_diff_full": round(float(avg_full), 6),
         "average_diff_trimmed": round(float(avg_trimmed), 6),
+        "ol_diff_threshold": round(float(ol_threshold), 6),
+        "rows_excluded_as_outliers_ol": int(df["ol_excluded"].sum()),
+        "rows_kept_ol": int(len(ol_kept)),
+        "average_ol_diff_full": round(float(ol_avg_full), 6),
+        "average_ol_diff_trimmed": round(float(ol_avg_trimmed), 6),
     }
 
     ext = "json" if args.out_format == "json" else "csv"
