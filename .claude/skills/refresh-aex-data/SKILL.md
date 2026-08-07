@@ -56,8 +56,12 @@ CSV.
 ### 3. Analyze the High/Open gap
 
 ```
-python scripts/analyze_high_open_diff.py data/aex_history.csv --exclude-pct 5 --out-format json --out data/aex_history_summary.json --detail-out data/aex_history_detail.csv
+python scripts/analyze_high_open_diff.py data/aex_history.csv --out-format json --out data/aex_history_summary.json --detail-out data/aex_history_detail.csv
 ```
+
+This computes mean/std and a 2-sigma probability band for the daily
+High-Open and Open-Low gaps (pass `--sigma` to change the multiplier from
+the default of 2).
 
 If this errors (e.g. the CSV is missing `High`/`Open` columns), stop and
 report it — don't push a partial or stale `data/` folder.
@@ -70,8 +74,8 @@ git status --porcelain data/
 
 - If that shows no changes, **skip commit/push entirely** and say so in the
   summary — this is the expected, non-error outcome on a day the market data
-  didn't move enough to change the trimmed CSV/JSON output (or the pipeline
-  re-ran on already-fresh data). Do not treat "nothing to commit" as a failure.
+  didn't move enough to change the CSV/JSON output (or the pipeline re-ran on
+  already-fresh data). Do not treat "nothing to commit" as a failure.
 - If there are changes:
   ```
   git add data/aex_history.csv data/aex_history_summary.json data/aex_history_detail.csv
@@ -87,8 +91,8 @@ git status --porcelain data/
 Whether triggered by a human or a routine, end with a short, concrete summary
 covering:
 - Date range and row count fetched
-- Trimmed average `High - Open` diff (and the untrimmed one, for contrast) —
-  pull these from `data/aex_history_summary.json`
+- Mean `High - Open` diff and its 2-sigma upper bound (`diff_mean`,
+  `diff_upper_bound`) — pull these from `data/aex_history_summary.json`
 - Whether a push happened, and the commit message if so, or "no changes to
   push" if not
 - Any error encountered, stated plainly, if a step failed

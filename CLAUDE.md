@@ -80,7 +80,8 @@ unproxied environment.
 - `data/aex_history.csv` — full OHLCV history from Yahoo Finance (^AEX),
   refreshed from a fixed 2015-01-01 start date on every run.
 - `data/aex_history_summary.json`, `data/aex_history_detail.csv` — derived
-  High-Open gap analysis (trimmed/untrimmed averages, per-row detail).
+  High-Open/Open-Low gap analysis (mean/std and a 2-sigma probability band,
+  per-row detail).
 - `scripts/fetch_aex_history.py`, `scripts/analyze_high_open_diff.py` —
   the two-stage refresh pipeline; see `.claude/skills/refresh-aex-data/`
   for the exact invocation.
