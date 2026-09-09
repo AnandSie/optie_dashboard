@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-08T04:08:02+00:00",
+  "generated_at": "2026-09-09T04:08:42+00:00",
   "input_file": "data/aex_history.csv",
-  "total_rows": 2989,
+  "total_rows": 2990,
   "rows_dropped_missing_data": 0,
   "sigma_k": 2.0,
-  "diff_mean": 3.583323,
-  "diff_std": 3.4855,
-  "diff_upper_bound": 10.554322,
+  "diff_mean": 3.584271,
+  "diff_std": 3.485303,
+  "diff_upper_bound": 10.554876,
   "diff_within_sigma_pct": 96.02,
-  "ol_diff_mean": 3.760194,
-  "ol_diff_std": 3.9259,
-  "ol_diff_upper_bound": 11.611993,
+  "ol_diff_mean": 3.759227,
+  "ol_diff_std": 3.925599,
+  "ol_diff_upper_bound": 11.610424,
   "ol_diff_within_sigma_pct": 95.42
 }
